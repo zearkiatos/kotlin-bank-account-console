@@ -24,6 +24,8 @@ dependencies {
     implementation(libs.guava)
     implementation("com.github.ajalt.clikt:clikt:5.1.0")
     implementation("com.github.ajalt.mordant:mordant:3.0.2")
+    implementation("com.github.ajalt.mordant:mordant-jvm:3.0.2")
+    implementation("com.github.ajalt.mordant:mordant-jvm-jna:3.0.2")
     implementation("org.mindrot:jbcrypt:0.4")
 }
 
@@ -49,7 +51,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "com.banckaccount.console.AppKt"
+    mainClass = "com.bankaccount.console.AppKt"
 }
 
 tasks.named<JavaExec>("run") {

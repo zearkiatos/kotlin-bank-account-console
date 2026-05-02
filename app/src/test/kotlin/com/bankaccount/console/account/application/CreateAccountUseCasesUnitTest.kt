@@ -40,10 +40,12 @@ class CreateAccountUseCasesUnitTest {
             accountType = AccountType.DEBIT.name
         )
 
-        val accountId = createAccountUseCases.create(createAccountRequest)
+        val account = createAccountUseCases.create(createAccountRequest)
 
-        assertNotNull(accountId)
-        assertEquals("test-account-id", accountId)
+        assertNotNull(account)
+        assertEquals("test-account-id", account.id)
+        assertEquals("test-user-id", account.userId)
+        assertEquals(AccountType.DEBIT.name, account.accountType)
         unmockkStatic(UUID::class)
     }
 }

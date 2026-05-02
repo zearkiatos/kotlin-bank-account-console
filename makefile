@@ -1,11 +1,14 @@
 run:
-	./gradlew run --console=plain
+	make build
+	./app/build/install/app/bin/app
 
 package:
 	./gradlew distTar
 
 build:
-	./gradlew --no-daemon shadowJar
+	rm -rf ./build
+	rm -rf ./app/build
+	./gradlew --no-daemon installDist
 
 test:
 	./gradlew test
