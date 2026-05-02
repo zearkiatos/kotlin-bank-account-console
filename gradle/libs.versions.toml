@@ -3,9 +3,11 @@
 
 [versions]
 guava = "33.4.5-jre"
+mockk = "1.13.8"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version = "2.3.0" }

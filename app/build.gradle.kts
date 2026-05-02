@@ -24,6 +24,7 @@ dependencies {
     implementation(libs.guava)
     implementation("com.github.ajalt.clikt:clikt:5.1.0")
     implementation("com.github.ajalt.mordant:mordant:3.0.2")
+    implementation("org.mindrot:jbcrypt:0.4")
 }
 
 testing {
@@ -32,6 +33,9 @@ testing {
         val test by getting(JvmTestSuite::class) {
             // Use JUnit Jupiter test framework
              useJUnit("4.13.2")
+            dependencies {
+                implementation(libs.mockk)
+            }
         }
     }
 }
