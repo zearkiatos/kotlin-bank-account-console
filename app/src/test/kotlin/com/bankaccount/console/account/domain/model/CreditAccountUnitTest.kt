@@ -12,7 +12,7 @@ class CreditAccountUnitTest {
         val userId = UUID.randomUUID().toString()
         val accountNumber = "1234567890"
         val balance = 1000.0
-        val transactions = listOf<String>()
+        val transactions = mutableListOf<String>()
 
         val creditAccount = CreditAccount(id = accountId, userId = userId, accountNumber = accountNumber, balance = balance, transactions = transactions)
 

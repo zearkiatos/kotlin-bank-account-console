@@ -120,7 +120,7 @@ class BankAccountConsoleAdapter(
                 CreateAccountRequest(
                         userId = userId,
                         accountType = accountType.name,
-                        transactions = listOf()
+                        transactions = mutableListOf()
                 )
         val account = createAccountPort.create(request)
         terminal.success("Account created successfully! Account ID: ${account.id}")

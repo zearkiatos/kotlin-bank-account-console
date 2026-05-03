@@ -20,7 +20,7 @@ class AccountResponseUnitTest {
             accountNumber = accountNumber,
             accountType = accountType,
             balance = 0.0,
-            transactions = listOf()
+            transactions = mutableListOf()
         )
 
         assertEquals(accountId, accountResponse.id)
@@ -44,7 +44,7 @@ class AccountResponseUnitTest {
             accountNumber = accountNumber,
             accountType = accountType,
             balance = balance,
-            transactions = listOf()
+            transactions = mutableListOf()
         )
 
         assertEquals(accountId, accountResponse.id)
@@ -67,7 +67,7 @@ class AccountResponseUnitTest {
             accountNumber = accountNumber,
             accountType = accountType,
             balance = 0.0,
-            transactions = listOf()
+            transactions = mutableListOf()
         )
 
         assertEquals(accountId, accountResponse.id)

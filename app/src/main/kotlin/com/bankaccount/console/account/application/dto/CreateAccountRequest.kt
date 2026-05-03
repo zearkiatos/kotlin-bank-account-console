@@ -6,5 +6,5 @@ data class CreateAccountRequest(
     val accountNumber: String? = "",
     val accountType: String,
     val balance: Double? = 0.0,
-    val transactions: List<String> = listOf()
+    val transactions: MutableList<String> = mutableListOf()
 )

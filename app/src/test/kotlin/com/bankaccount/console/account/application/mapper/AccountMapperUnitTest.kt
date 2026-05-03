@@ -88,7 +88,7 @@ class AccountMapperUnitTest {
         val userId = UUID.randomUUID().toString()
         val accountNumber = "1234567890"
 
-        val checkingAccount = CheckingAccount(id = accountId, userId = userId, accountNumber = accountNumber, balance = 0.0, transactions = listOf())
+        val checkingAccount = CheckingAccount(id = accountId, userId = userId, accountNumber = accountNumber, balance = 0.0, transactions = mutableListOf())
 
         val accountResponse = checkingAccount.toResponse()
 
@@ -104,7 +104,7 @@ class AccountMapperUnitTest {
         val userId = UUID.randomUUID().toString()
         val accountNumber = "1234567890"
 
-        val creditAccount = CreditAccount(id = accountId, userId = userId, accountNumber = accountNumber, balance = 0.0, transactions = listOf())
+        val creditAccount = CreditAccount(id = accountId, userId = userId, accountNumber = accountNumber, balance = 0.0, transactions = mutableListOf())
 
         val accountResponse = creditAccount.toResponse()
 
@@ -120,7 +120,7 @@ class AccountMapperUnitTest {
             val userId = UUID.randomUUID().toString()
             val accountNumber = "1234567890"
     
-            val debitAccount = DebitAccount(id = accountId, userId = userId, accountNumber = accountNumber, balance = 0.0, transactions = listOf())
+            val debitAccount = DebitAccount(id = accountId, userId = userId, accountNumber = accountNumber, balance = 0.0, transactions = mutableListOf())
     
             val accountResponse = debitAccount.toResponse()
     

@@ -7,5 +7,5 @@ sealed class Account {
     abstract val userId: String
     abstract val accountNumber: String
     abstract val balance: Double
-    abstract val transactions: List<String>
+    abstract val transactions: MutableList<String>
 }

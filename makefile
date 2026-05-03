@@ -18,3 +18,14 @@ set-env:
 
 install-env:
 	sdk env install
+
+test-coverage:
+	./gradlew jacocoTestReport
+
+install-hooks:
+	bash ./scripts/install-hooks.sh
+
+check-coverage:
+	./gradlew jacocoTestReport
+	bash ./scripts/check-coverage.sh
+	open ./app/build/reports/jacoco/test/html/index.html

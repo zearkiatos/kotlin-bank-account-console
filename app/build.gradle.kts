@@ -12,6 +12,9 @@ plugins {
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    
+    // 🔴 Plugin JaCoCo para code coverage
+    jacoco
 }
 
 repositories {
@@ -56,4 +59,89 @@ application {
 
 tasks.named<JavaExec>("run") {
     standardInput = System.`in`
+}
+
+// ============================================
+// 🔴 CONFIGURATION JACOCO - CODE COVERAGE
+// ============================================
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+// Tarea para generar reporte HTML de JaCoCo
+tasks.named<Test>("test") {
+    finalizedBy("jacocoTestReport")
+}
+
+tasks.named<JacocoReport>("jacocoTestReport") {
+    dependsOn("test")
+    description = "Generate JaCoCo code coverage report after running tests"
+    
+    // Archivos fuente
+    sourceDirectories.setFrom(sourceSets["main"].allSource.sourceDirectories)
+    classDirectories.setFrom(files(sourceSets["main"].output.classesDirs))
+    executionData.setFrom(files(layout.buildDirectory.file("jacoco/test.exec")))
+    
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
+    
+    doLast {
+        println("\n" + "=".repeat(60))
+        println("📊 REPORT GENERATED SUCCESSFULLY")
+        println("=".repeat(60))
+        println("📄 Open in the browser:")
+        println("   ${layout.buildDirectory.get()}/reports/jacoco/test/html/index.html")
+        println("=".repeat(60))
+    }
+}
+
+
+tasks.register("verifyCodeCoverage") {
+    dependsOn("jacocoTestReport")
+    description = "Verify that code coverage is >= 80%"
+    
+    doLast {
+        val reportFile = file("${layout.buildDirectory.get()}/reports/jacoco/test/jacocoTestReport.xml")
+        
+        if (!reportFile.exists()) {
+            throw GradleException("❌ JaCoCo report not found. Please run: ./gradlew test jacocoTestReport")
+        }
+        
+        val xml = reportFile.readText()
+        
+        // Parsear cobertura de líneas
+        val lineRateRegex = """<counter type="LINE"[^>]*covered="(\d+)"[^>]*missed="(\d+)"""".toRegex()
+        val match = lineRateRegex.find(xml)
+        
+        if (match != null) {
+            val covered = match.groupValues[1].toInt()
+            val missed = match.groupValues[2].toInt()
+            val total = covered + missed
+            val percentage = if (total > 0) (covered * 100) / total else 0
+            
+            println("\n" + "=".repeat(60))
+            println("📊 CODE COVERAGE REPORT")
+            println("=".repeat(60))
+            println("✅ Lines Covered:    $covered")
+            println("❌ Lines Not Covered: $missed")
+            println("📈 Total Lines:     $total")
+            println("💯 Percentage:          $percentage%")
+            println("🎯 Minimum Required:    80%")
+            println("=".repeat(60))
+            
+            if (percentage < 80) {
+                println("\n🚨 ERROR: The coverage ($percentage%) is below the required 80%")
+                println("📄 Open the report in the browser: ${layout.buildDirectory.get()}/reports/jacoco/test/html/index.html")
+                throw GradleException("❌ Code coverage below the required 80% ($percentage%)")
+            } else {
+                println("\n✨ Valid code coverage! ($percentage% >= 80%)")
+            }
+        } else {
+            println("\n⚠️  Warning: Could not parse coverage from XML")
+        }
+    }
 }

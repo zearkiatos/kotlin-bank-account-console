@@ -6,5 +6,5 @@ data class AccountResponse(
     val accountNumber: String,
     val accountType: String,
     val balance: Double,
-    val transactions: List<String>
+    val transactions: MutableList<String>
 )

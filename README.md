@@ -33,3 +33,16 @@ flowchart TD
     A --> C --> F
     A --> D --> G
 ```
+
+## 📊 Code Coverage
+
+Este proyecto utiliza **JaCoCo** para medir y validar la cobertura de código.
+
+### Instalación del Pre-commit Hook
+
+Ejecuta esto una sola vez para instalar el hook:
+
+```bash
+$ bash scripts/install-hooks.sh
+
+```
