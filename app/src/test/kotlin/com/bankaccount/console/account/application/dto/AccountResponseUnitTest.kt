@@ -18,13 +18,16 @@ class AccountResponseUnitTest {
             id = accountId,
             userId = userId,
             accountNumber = accountNumber,
-            accountType = accountType
+            accountType = accountType,
+            balance = 0.0,
+            transactions = listOf()
         )
 
         assertEquals(accountId, accountResponse.id)
         assertEquals(userId, accountResponse.userId)
         assertEquals(accountNumber, accountResponse.accountNumber)
         assertEquals(accountType, accountResponse.accountType)
+        assertEquals(0.0, accountResponse.balance, 0.0)
     }
 
     @Test
@@ -33,18 +36,22 @@ class AccountResponseUnitTest {
         val userId = UUID.randomUUID().toString()
         val accountNumber = "1234567890"
         val accountType = "CREDIT"
+        val balance = 0.0
 
         val accountResponse = AccountResponse(
             id = accountId,
             userId = userId,
             accountNumber = accountNumber,
-            accountType = accountType
+            accountType = accountType,
+            balance = balance,
+            transactions = listOf()
         )
 
         assertEquals(accountId, accountResponse.id)
         assertEquals(userId, accountResponse.userId)
         assertEquals(accountNumber, accountResponse.accountNumber)
         assertEquals(accountType, accountResponse.accountType)
+        assertEquals(balance, accountResponse.balance, 0.0)
     }
 
     @Test
@@ -58,13 +65,16 @@ class AccountResponseUnitTest {
             id = accountId,
             userId = userId,
             accountNumber = accountNumber,
-            accountType = accountType
+            accountType = accountType,
+            balance = 0.0,
+            transactions = listOf()
         )
 
         assertEquals(accountId, accountResponse.id)
         assertEquals(userId, accountResponse.userId)
         assertEquals(accountNumber, accountResponse.accountNumber)
         assertEquals(accountType, accountResponse.accountType)
+        assertEquals(0.0, accountResponse.balance, 0.0)
     }
 
 }

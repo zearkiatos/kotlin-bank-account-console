@@ -14,17 +14,23 @@ fun CreateAccountRequest.toDomain(): Account {
         AccountType.CHECKING.name -> CheckingAccount(
             id = id?.trim() ?: "",
             userId = userId.trim(),
-            accountNumber = accountNumber?.trim() ?: ""
+            accountNumber = accountNumber?.trim() ?: "",
+            balance = balance ?: 0.0,
+            transactions = transactions
         )
         AccountType.DEBIT.name -> DebitAccount(
             id = id?.trim() ?: "",
             userId = userId.trim(),
-            accountNumber = accountNumber?.trim() ?: ""
+            accountNumber = accountNumber?.trim() ?: "",
+            balance = balance ?: 0.0,
+            transactions = transactions
         )
         AccountType.CREDIT.name -> CreditAccount(
             id = id?.trim() ?: "",
             userId = userId.trim(),
-            accountNumber = accountNumber?.trim() ?: ""
+            accountNumber = accountNumber?.trim() ?: "",
+            balance = balance ?: 0.0,
+            transactions = transactions
         )
         else -> throw IllegalArgumentException("Invalid account type: ${accountType.trim()}")
     }
@@ -40,6 +46,8 @@ fun Account.toResponse(): AccountResponse {
         id = id.trim(),
         userId = userId.trim(),
         accountNumber = accountNumber.trim(),
-        accountType = accountType.trim()
+        accountType = accountType.trim(),
+        balance = balance,
+        transactions = transactions
     )
 }

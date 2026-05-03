@@ -11,12 +11,16 @@ class CheckingAccountUnitTest {
         val accountId = UUID.randomUUID().toString()
         val userId = UUID.randomUUID().toString()
         val accountNumber = "1234567890"
+        val balance = 1000.0
+        val transactions = listOf<String>()
 
-        val checkingAccount = CheckingAccount(id = accountId, userId = userId, accountNumber = accountNumber)
+        val checkingAccount = CheckingAccount(id = accountId, userId = userId, accountNumber = accountNumber, balance = balance, transactions = transactions)
 
         assertEquals(accountId, checkingAccount.id)
         assertEquals(userId, checkingAccount.userId)
         assertEquals(accountNumber, checkingAccount.accountNumber)
+        assertEquals(balance, checkingAccount.balance, 0.0)
+        assertEquals(transactions, checkingAccount.transactions)
     }
     
 }

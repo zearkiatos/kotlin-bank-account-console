@@ -20,6 +20,8 @@ class InMemoryAccountRepositoryUnitTest {
             id = UUID.randomUUID().toString(),
             userId = UUID.randomUUID().toString(),
             accountNumber = "1234567890",
+            balance = 0.0,
+            transactions = listOf<String>()
         )
 
         repository.create(account)
@@ -28,6 +30,7 @@ class InMemoryAccountRepositoryUnitTest {
         assertEquals(account.id, accountSaved?.id)
         assertEquals(account.userId, accountSaved?.userId)
         assertEquals(account.accountNumber, accountSaved?.accountNumber)
+        assertEquals(account.balance, accountSaved?.balance)
     }
 
     @Test
@@ -37,11 +40,15 @@ class InMemoryAccountRepositoryUnitTest {
             id = UUID.randomUUID().toString(),
             userId = UUID.randomUUID().toString(),
             accountNumber = "1234567890",
+            balance = 0.0,
+            transactions = listOf<String>()
         )
         val account2 = CreditAccount(
             id = UUID.randomUUID().toString(),
             userId = UUID.randomUUID().toString(),
             accountNumber = "0987654321",
+            balance = 0.0,
+            transactions = listOf<String>()
         )
 
         repository.create(account1)
@@ -71,6 +78,8 @@ class InMemoryAccountRepositoryUnitTest {
             id = UUID.randomUUID().toString(),
             userId = UUID.randomUUID().toString(),
             accountNumber = "1234567890",
+            balance = 0.0,
+            transactions = listOf<String>()
         )
 
         repository.create(account)
@@ -87,6 +96,8 @@ class InMemoryAccountRepositoryUnitTest {
             id = UUID.randomUUID().toString(),
             userId = UUID.randomUUID().toString(),
             accountNumber = "1234567890",
+            balance = 0.0,
+            transactions = listOf<String>()
         )
 
         repository.create(account)
@@ -97,6 +108,7 @@ class InMemoryAccountRepositoryUnitTest {
         assertEquals(updatedAccount.id, accountUpdated?.id)
         assertEquals(updatedAccount.userId, accountUpdated?.userId)
         assertEquals(updatedAccount.accountNumber, accountUpdated?.accountNumber)
+        assertEquals(updatedAccount.balance, accountUpdated?.balance)
     }
 
 }

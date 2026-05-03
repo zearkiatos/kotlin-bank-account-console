@@ -20,6 +20,8 @@ class AccountRepositoryUnitTest {
             id = UUID.randomUUID().toString(),
             userId = UUID.randomUUID().toString(),
             accountNumber = "1234567890",
+            balance = 0.0,
+            transactions = listOf<String>()
         )
 
         repository.create(account)
@@ -37,11 +39,15 @@ class AccountRepositoryUnitTest {
             id = UUID.randomUUID().toString(),
             userId = UUID.randomUUID().toString(),
             accountNumber = "1234567890",
+            balance = 0.0,
+            transactions = listOf<String>()
         )
         val account2 = CreditAccount(
             id = UUID.randomUUID().toString(),
             userId = UUID.randomUUID().toString(),
             accountNumber = "0987654321",
+            balance = 0.0,
+            transactions = listOf<String>()
         )
 
         repository.create(account1)
@@ -71,6 +77,8 @@ class AccountRepositoryUnitTest {
             id = UUID.randomUUID().toString(),
             userId = UUID.randomUUID().toString(),
             accountNumber = "1234567890",
+            balance = 0.0,
+            transactions = listOf<String>()
         )
 
         repository.create(account)
@@ -87,6 +95,8 @@ class AccountRepositoryUnitTest {
             id = UUID.randomUUID().toString(),
             userId = UUID.randomUUID().toString(),
             accountNumber = "1234567890",
+            balance = 0.0,
+            transactions = listOf<String>()
         )
 
         repository.create(account)

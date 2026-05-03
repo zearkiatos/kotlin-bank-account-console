@@ -4,5 +4,7 @@ data class AccountResponse(
     val id: String,
     val userId: String,
     val accountNumber: String,
-    val accountType: String
+    val accountType: String,
+    val balance: Double,
+    val transactions: List<String>
 )

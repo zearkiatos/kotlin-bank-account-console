@@ -29,4 +29,8 @@ class InMemoryAccountRepository : AccountRepository {
     override fun delete(id: String) {
         accounts.removeIf { it.id == id }
     }
+
+    override fun getByUserId(userId: String): List<Account> {
+        return accounts.filter { it.userId == userId }
+    }
 }

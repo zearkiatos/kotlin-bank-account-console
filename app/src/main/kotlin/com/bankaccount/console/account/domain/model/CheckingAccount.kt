@@ -5,7 +5,10 @@ import com.bankaccount.console.account.domain.model.Account
 data class CheckingAccount(
     override val id: String,
     override val userId: String,
-    override val accountNumber: String): Account() 
+    override val accountNumber: String,
+    override val balance: Double,
+    override val transactions: List<String>
+): Account() 
 {
     
 }
