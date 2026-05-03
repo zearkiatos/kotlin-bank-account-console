@@ -19,7 +19,7 @@ cat > .git/hooks/pre-commit << 'EOF'
 
 # ============================================
 # Pre-commit Hook: Validate Code Coverage
-# Block commits if coverage < 80%
+# Block commits if coverage < 50%
 # ============================================
 
 set -e

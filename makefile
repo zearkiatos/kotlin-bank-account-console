@@ -25,7 +25,11 @@ test-coverage:
 install-hooks:
 	bash ./scripts/install-hooks.sh
 
+open-coverage:
+	bash ./scripts/open-coverage.sh
+
+
 check-coverage:
 	./gradlew jacocoTestReport
 	bash ./scripts/check-coverage.sh
-	open ./app/build/reports/jacoco/test/html/index.html
+	make open-coverage

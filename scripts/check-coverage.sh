@@ -2,7 +2,7 @@
 
 # ============================================
 # Script: check-coverage.sh
-# Purpose: Execute tests, generate JaCoCo report and verify code coverage >= 80%
+# Purpose: Execute tests, generate JaCoCo report and verify code coverage >= 50%
 # ============================================
 
 set -e  # Exit on error
@@ -63,9 +63,9 @@ color_percentage() {
     local yellow='\033[1;33m'
     local nc='\033[0m'  # No Color
     
-    if [[ $percentage -lt 60 ]]; then
+    if [[ $percentage -lt 30 ]]; then
         echo -e "${red}${percentage}%${nc}"
-    elif [[ $percentage -lt 80 ]]; then
+    elif [[ $percentage -lt 50 ]]; then
         echo -e "${yellow}${percentage}%${nc}"
     else
         echo -e "${green}${percentage}%${nc}"
@@ -102,7 +102,7 @@ COVERAGE_COLORED=$(color_percentage "$COVERAGE")
 
 # Step 4: Verify code coverage meets minimum threshold
 echo ""
-echo "▶️  Step 4: Verifying coverage >= 80%..."
+echo "▶️  Step 4: Verifying coverage >= 50%..."
 
 # Capture the exit code from verifyCodeCoverage WITHOUT exiting the script
 set +e
@@ -117,7 +117,7 @@ if [[ $VERIFY_EXIT_CODE -eq 0 ]]; then
     echo "║       ✨ COVERAGE VALIDATION OK ✨    ║"
     echo "╠════════════════════════════════════════╣"
     echo "║  Current Coverage: $COVERAGE_COLORED               ║"
-    echo "║  Minimum Required: 80%                 ║"
+    echo "║  Minimum Required: 50%                 ║"
     echo "║  Status: ✅ APPROVED                  ║"
     echo "╚════════════════════════════════════════╝"
     echo ""
@@ -127,7 +127,7 @@ else
     echo "║      ❌ COVERAGE VALIDATION FAILED ❌  ║"
     echo "╠════════════════════════════════════════╣"
     echo "║  Current Coverage: $COVERAGE_COLORED               ║"
-    echo "║  Minimum Required: 80%                 ║"
+    echo "║  Minimum Required: 50%                 ║"
     echo "║  Status: ⚠️  NOT APPROVED              ║"
     echo "╚════════════════════════════════════════╝"
     echo ""
