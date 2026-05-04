@@ -13,20 +13,37 @@ import com.github.ajalt.mordant.widgets.Text
 import com.bankaccount.console.account.infrastructure.console.BankAccountConsoleAdapter
 import com.bankaccount.console.account.infrastructure.repository.InMemoryAccountRepository
 import com.bankaccount.console.user.infrastructure.repository.InMemoryUserRepository
+import com.bankaccount.console.user.infrastructure.console.LoginConsoleAdapter
 import com.bankaccount.console.account.application.CreateAccountUseCases
 import com.bankaccount.console.user.application.CreateUserUseCases
+import com.bankaccount.console.user.application.LoginUseCases
+import com.bankaccount.console.transaction.application.CreateTransactionUseCases
+import com.bankaccount.console.transaction.infrastructure.repository.InMemoryTransactionRepository
 
 fun main() {
     val terminal = Terminal()
+    val userRepository = InMemoryUserRepository()
+    val accountRepository = InMemoryAccountRepository()
+    val transactionRepository = InMemoryTransactionRepository()
     val accountUseCases = CreateAccountUseCases(
-        accountRepository = InMemoryAccountRepository()
+        accountRepository = accountRepository
     )
     val userUseCases = CreateUserUseCases(
-        userRepository = InMemoryUserRepository()
+        userRepository = userRepository
+    )
+    val transactionUseCases = CreateTransactionUseCases(
+        transactionRepository = transactionRepository,
+        accountRepository = accountRepository
     )
     val app = BankAccountConsoleAdapter(
         createAccountPort = accountUseCases,
-        createUserPort = userUseCases
+        createUserPort = userUseCases,
+    )
+
+    val authenticateApp = LoginConsoleAdapter(
+        loginInputPort = LoginUseCases(
+            userRepository = userRepository
+        )
     )
 
     header(terminal)
@@ -40,7 +57,7 @@ fun main() {
 
         when (options) {
             "1" -> app.run()
-            "2" -> terminal.success("Login functionality not implemented yet.")
+            "2" -> authenticateApp.run()
             else -> terminal.danger("Invalid option, please try again.")
         }
     }

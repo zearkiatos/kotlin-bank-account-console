@@ -23,8 +23,8 @@ extract_coverage() {
     fi
     
     # Extract the last LINE counter (the total coverage)
-    local last_line_counter=$(grep 'type="LINE"' "$xml_file" | tail -1)
-    
+    local last_line_counter=$(grep -o '<counter type="LINE"[^>]*/>' "$xml_file" | tail -1)
+
     if [[ -z "$last_line_counter" ]]; then
         echo "❌ No LINE counter found in XML"
         echo "0"

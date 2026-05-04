@@ -6,5 +6,5 @@ data class TransactionResponse(
     val balanceBefore: Double,
     val amount: Double,
     val type: String,
-    val timestamp: String
+    val timestamp: Long
 )

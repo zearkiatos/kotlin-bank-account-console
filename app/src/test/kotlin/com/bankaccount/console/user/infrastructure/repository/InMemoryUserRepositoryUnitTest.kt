@@ -86,7 +86,7 @@ class InMemoryUserRepositoryUnitTest {
     }
 
     @Test
-    fun `Given a User, when authenticate is called with correct credentials, then it returns the User`() {
+    fun `Given a User, when getUserByEmail is called with correct email, then it returns the User`() {
         val user = User(
             id = UUID.randomUUID().toString(),
             firstName = "Alice",
@@ -96,13 +96,13 @@ class InMemoryUserRepositoryUnitTest {
         )
         repository.create(user)
         
-        val authenticatedUser = repository.authenticate(user.email, user.passwordHash)
+        val retrievedUser = repository.getUserByEmail(user.email)
         
-        assertEquals(user, authenticatedUser)
+        assertEquals(user, retrievedUser)
     }
 
     @Test
-    fun `Given a User, when authenticate is called with incorrect password, then it returns null`() {
+    fun `Given a User, when getUserByEmail is called with incorrect email, then it returns null`() {
         val user = User(
             id = UUID.randomUUID().toString(),
             firstName = "Bob",
@@ -112,13 +112,13 @@ class InMemoryUserRepositoryUnitTest {
         )
         repository.create(user)
         
-        val authenticatedUser = repository.authenticate(user.email, "wrong_password")
+        val authenticatedUser = repository.getUserByEmail("wrong@example.com")
         
         assertNull(authenticatedUser)
     }
 
     @Test
-    fun `Given a User, when authenticate is called with non-existent email, then it returns null`() {
+    fun `Given a User, when getUserByEmail is called with non-existent email, then it returns null`() {
         val user = User(
             id = UUID.randomUUID().toString(),
             firstName = "Charlie",
@@ -128,7 +128,7 @@ class InMemoryUserRepositoryUnitTest {
         )
         repository.create(user)
         
-        val authenticatedUser = repository.authenticate("non-existent@example.com", "hashed_password")
+        val authenticatedUser = repository.getUserByEmail("non-existent@example.com")
         
         assertNull(authenticatedUser)
     }

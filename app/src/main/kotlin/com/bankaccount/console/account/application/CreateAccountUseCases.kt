@@ -18,7 +18,7 @@ class CreateAccountUseCases(
         require(request.userId.isNotBlank()) { "User ID must not be blank" }
 
         val accountId = UUID.randomUUID().toString()
-        val balance = request.balance ?: 0.0
+        val balance = request.balance
         val account = request.copy(
             id = accountId,
             accountNumber = BankAccountNumberGenerator.generate(

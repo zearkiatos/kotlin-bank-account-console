@@ -8,5 +8,5 @@ interface UserRepository {
     fun get(id: String): User?
     fun update(user: User)
     fun delete(id: String)
-    fun authenticate(email: String, password: String): User?
+    fun getUserByEmail(email: String): User?
 }

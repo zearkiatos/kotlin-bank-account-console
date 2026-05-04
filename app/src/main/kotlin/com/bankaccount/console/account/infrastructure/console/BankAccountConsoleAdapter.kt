@@ -48,8 +48,6 @@ class BankAccountConsoleAdapter(
             val userId = this.createUser()
 
             this.createAccount(userId, accountType)
-
-            System.exit(0)
         }
     }
 

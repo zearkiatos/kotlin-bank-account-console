@@ -23,6 +23,6 @@ fun Transaction.toResponse(): TransactionResponse {
         balanceBefore = this.balanceBefore,
         amount = this.amount,
         type = this.type.name,
-        timestamp = this.timestamp.toString()
+        timestamp = this.timestamp
     )
 }

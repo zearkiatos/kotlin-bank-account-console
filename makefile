@@ -6,8 +6,6 @@ package:
 	./gradlew distTar
 
 build:
-	rm -rf ./build
-	rm -rf ./app/build
 	./gradlew --no-daemon installDist
 
 test:
