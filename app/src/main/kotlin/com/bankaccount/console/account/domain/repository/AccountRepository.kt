@@ -8,5 +8,5 @@ interface AccountRepository {
     fun get(id: String): Account?
     fun update(account: Account)
     fun delete(id: String)
-    fun getByUserId(userId: String): List<Account>
+    fun getByUserId(userId: String): Account?
 }

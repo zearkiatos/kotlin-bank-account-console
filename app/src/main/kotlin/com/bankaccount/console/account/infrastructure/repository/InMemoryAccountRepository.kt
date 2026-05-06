@@ -30,7 +30,7 @@ class InMemoryAccountRepository : AccountRepository {
         accounts.removeIf { it.id == id }
     }
 
-    override fun getByUserId(userId: String): List<Account> {
-        return accounts.filter { it.userId == userId }
+    override fun getByUserId(userId: String): Account? {
+        return accounts.firstOrNull { it.userId == userId }
     }
 }

@@ -139,12 +139,9 @@ class InMemoryAccountRepositoryUnitTest {
         repository.create(account2)
         repository.create(account3)
 
-        val userAccounts = repository.getByUserId(sharedUserId)
+        val userAccount = repository.getByUserId(sharedUserId)
 
-        assertEquals(2, userAccounts.size)
-        assertTrue(userAccounts.contains(account1))
-        assertTrue(userAccounts.contains(account2))
-        assertTrue(!userAccounts.contains(account3))
+        assertEquals(account1, userAccount)
     }
 
     @Test
@@ -152,9 +149,9 @@ class InMemoryAccountRepositoryUnitTest {
         val account = DebitAccount(UUID.randomUUID().toString(), UUID.randomUUID().toString(), "001-02-12345678-5", 500.0, mutableListOf())
         repository.create(account)
 
-        val userAccounts = repository.getByUserId("non-existent-user-id")
+        val userAccount = repository.getByUserId("non-existent-user-id")
 
-        assertTrue(userAccounts.isEmpty())
+        assertNull(userAccount)
     }
 
     @Test
@@ -169,12 +166,9 @@ class InMemoryAccountRepositoryUnitTest {
         repository.create(account2)
         repository.create(account3)
 
-        val userAccounts = repository.getByUserId(userId)
+        val userAccount = repository.getByUserId(userId)
 
-        assertEquals(3, userAccounts.size)
-        assertEquals(account1, userAccounts[0])
-        assertEquals(account2, userAccounts[1])
-        assertEquals(account3, userAccounts[2])
+        assertEquals(account1, userAccount)
     }
 
     @Test

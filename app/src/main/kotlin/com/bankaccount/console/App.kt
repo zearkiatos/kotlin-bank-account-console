@@ -47,8 +47,9 @@ fun main() {
     )
 
     header(terminal)
+    var userId: String? = null
     while(true) {
-        val options = mainMenu(terminal)
+        val options = mainMenu(terminal, userId)
 
         if (options == "3") {
             terminal.danger("Exiting...")
@@ -56,14 +57,27 @@ fun main() {
         }
 
         when (options) {
-            "1" -> app.run()
-            "2" -> authenticateApp.run()
+            "1" -> {
+                app.run()
+            }
+            "2" -> {
+                userId = authenticateApp.run()
+            }
+            "3" -> {
+                terminal.danger("Exiting...")
+                System.exit(0)
+            }
+            "4" -> {
+                terminal.success("Fetching account balance...")
+                terminal.danger("This feature is not implemented yet. Stay tuned for updates!")
+            }
+            "5" -> {
+                userId = null
+                terminal.danger("Logged out successfully...")
+            }
             else -> terminal.danger("Invalid option, please try again.")
         }
     }
-
-
-    app.run()
 }
 
 private fun header(terminal: Terminal) {
@@ -91,18 +105,24 @@ private fun header(terminal: Terminal) {
         terminal.println((brightBlue + italic)(subtitle))
     }
 
-    private fun mainMenu(terminal: Terminal): String? {
+    private fun mainMenu(terminal: Terminal, userId: String?): String? {
         val title =
                 """
             What would you like to do?:
         """.trimIndent()
         terminal.println((brightGreen + bold)(title))
+        var userChoices = listOf("1. Create Account", "2. Login", "3. Exit")
+        var menuInfo = "Choose an option or exit (1, 2 or 3)"
 
-        val userChoices = listOf("1. Create Account", "2. Login", "Exit")
+        if (!userId.isNullOrBlank()) {
+            userChoices = listOf("1. Get Account Balance", "2. Logout", "3. Exit")
+            menuInfo = "Choose an option or exit (1, 2 or 3)"
+        }
+
         val selection =
                 terminal.interactiveSelectList(
                         userChoices,
-                        "Choose an option or exit (1, 2 or 3)",
+                        menuInfo,
                 )
 
         if (selection == null) {
@@ -110,9 +130,20 @@ private fun header(terminal: Terminal) {
             return null
         }
 
-        val index = userChoices.indexOf(selection)
+        val index = resolvedMenuChoice(selection)
         terminal.success("You chose option $index: $selection")
-        return (index + 1).toString()
+        return index
+    }
+
+    fun resolvedMenuChoice(selection: String): String {
+        return when (selection) {
+            "1. Create Account" -> "1"
+            "2. Login" -> "2"
+            "3. Exit" -> "3"
+            "1. Get Account Balance" -> "4"
+            "2. Logout" -> "5"
+            else -> "invalid"
+        }
     }
 
 
