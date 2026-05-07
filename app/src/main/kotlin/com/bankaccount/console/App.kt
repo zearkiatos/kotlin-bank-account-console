@@ -11,12 +11,14 @@ import com.github.ajalt.mordant.terminal.success
 import com.github.ajalt.mordant.widgets.Panel
 import com.github.ajalt.mordant.widgets.Text
 import com.bankaccount.console.account.infrastructure.console.BankAccountConsoleAdapter
+import com.bankaccount.console.account.infrastructure.console.AccountBalanceConsoleAdapter
 import com.bankaccount.console.account.infrastructure.repository.InMemoryAccountRepository
 import com.bankaccount.console.user.infrastructure.repository.InMemoryUserRepository
 import com.bankaccount.console.user.infrastructure.console.LoginConsoleAdapter
 import com.bankaccount.console.account.application.CreateAccountUseCases
 import com.bankaccount.console.user.application.CreateUserUseCases
 import com.bankaccount.console.user.application.LoginUseCases
+import com.bankaccount.console.account.application.AccountUseCases
 import com.bankaccount.console.transaction.application.CreateTransactionUseCases
 import com.bankaccount.console.transaction.infrastructure.repository.InMemoryTransactionRepository
 
@@ -35,9 +37,16 @@ fun main() {
         transactionRepository = transactionRepository,
         accountRepository = accountRepository
     )
+    val accountBalanceUseCases = AccountUseCases(
+        accountRepository = accountRepository
+    )
     val app = BankAccountConsoleAdapter(
         createAccountPort = accountUseCases,
         createUserPort = userUseCases,
+    )
+
+    val accountBalanceApp = AccountBalanceConsoleAdapter(
+        accountPort = accountBalanceUseCases
     )
 
     val authenticateApp = LoginConsoleAdapter(
@@ -69,7 +78,7 @@ fun main() {
             }
             "4" -> {
                 terminal.success("Fetching account balance...")
-                terminal.danger("This feature is not implemented yet. Stay tuned for updates!")
+                accountBalanceApp.run(userId!!)
             }
             "5" -> {
                 userId = null
@@ -115,8 +124,8 @@ private fun header(terminal: Terminal) {
         var menuInfo = "Choose an option or exit (1, 2 or 3)"
 
         if (!userId.isNullOrBlank()) {
-            userChoices = listOf("1. Get Account Balance", "2. Logout", "3. Exit")
-            menuInfo = "Choose an option or exit (1, 2 or 3)"
+            userChoices = listOf("1. Get Account Balance", "2. Transactions", "3. Logout", "4. Exit")
+            menuInfo = "Choose an option or exit (1, 2, 3 or 4)"
         }
 
         val selection =
@@ -141,7 +150,9 @@ private fun header(terminal: Terminal) {
             "2. Login" -> "2"
             "3. Exit" -> "3"
             "1. Get Account Balance" -> "4"
-            "2. Logout" -> "5"
+            "2. Transactions" -> "5"
+            "3. Logout" -> "6"
+            "4. Exit" -> "7"
             else -> "invalid"
         }
     }
