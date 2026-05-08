@@ -61,4 +61,12 @@ class GetTransactionUseCasesUnitTest {
         val responses = getTransactionUseCases.getByAccountId(accountId)
         assertEquals(0, responses?.size)   
     }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `Given blank accountId, when getByAccountId is called, then an IllegalArgumentException is thrown`() {
+        val transactionRepository = MockTransactionRepository()
+        val getTransactionUseCases = GetTransactionUseCases(transactionRepository)
+
+        getTransactionUseCases.getByAccountId("")
+    }
 }

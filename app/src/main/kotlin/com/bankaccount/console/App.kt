@@ -20,7 +20,9 @@ import com.bankaccount.console.user.application.CreateUserUseCases
 import com.bankaccount.console.user.application.LoginUseCases
 import com.bankaccount.console.account.application.AccountUseCases
 import com.bankaccount.console.transaction.application.CreateTransactionUseCases
+import com.bankaccount.console.transaction.application.GetTransactionUseCases
 import com.bankaccount.console.transaction.infrastructure.repository.InMemoryTransactionRepository
+import com.bankaccount.console.transaction.infrastructure.console.TransactionConsoleAdapter
 
 fun main() {
     val terminal = Terminal()
@@ -33,9 +35,12 @@ fun main() {
     val userUseCases = CreateUserUseCases(
         userRepository = userRepository
     )
-    val transactionUseCases = CreateTransactionUseCases(
+    val createTransactionUseCases = CreateTransactionUseCases(
         transactionRepository = transactionRepository,
         accountRepository = accountRepository
+    )
+    val transactionUseCases = GetTransactionUseCases(
+        transactionRepository = transactionRepository
     )
     val accountBalanceUseCases = AccountUseCases(
         accountRepository = accountRepository
@@ -53,6 +58,12 @@ fun main() {
         loginInputPort = LoginUseCases(
             userRepository = userRepository
         )
+    )
+
+    val transactionApp = TransactionConsoleAdapter(
+        createTransactionPort = createTransactionUseCases,
+        transactionPort = transactionUseCases,
+        accountPort = accountBalanceUseCases
     )
 
     header(terminal)
@@ -81,6 +92,10 @@ fun main() {
                 accountBalanceApp.run(userId!!)
             }
             "5" -> {
+                terminal.success("Fetching transaction history...")
+                transactionApp.run(userId!!)
+            }
+            "6" -> {
                 userId = null
                 terminal.danger("Logged out successfully...")
             }
