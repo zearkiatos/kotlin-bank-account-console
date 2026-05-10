@@ -10,5 +10,15 @@ data class CheckingAccount(
     override val transactions: MutableList<String>
 ): Account() 
 {
-    
+    override fun withdraw(amount: Int): Int {
+        return if (amount > balance) {
+            0
+        } else {
+            (balance - amount).toInt()
+        }
+    }
+
+    override fun deposit(amount: Int): Int {
+        return (balance + amount).toInt()
+    }
 }

@@ -51,3 +51,30 @@ fun Account.toResponse(): AccountResponse {
         transactions = transactions
     )
 }
+
+fun AccountResponse.toDomain(): Account {
+    return when(accountType.trim().uppercase()) {
+        AccountType.CHECKING.name -> CheckingAccount(
+            id = id.trim(),
+            userId = userId.trim(),
+            accountNumber = accountNumber.trim(),
+            balance = balance,
+            transactions = transactions
+        )
+        AccountType.DEBIT.name -> DebitAccount(
+            id = id.trim(),
+            userId = userId.trim(),
+            accountNumber = accountNumber.trim(),
+            balance = balance,
+            transactions = transactions
+        )
+        AccountType.CREDIT.name -> CreditAccount(
+            id = id.trim(),
+            userId = userId.trim(),
+            accountNumber = accountNumber.trim(),
+            balance = balance,
+            transactions = transactions
+        )
+        else -> throw IllegalArgumentException("Invalid account type: ${accountType.trim()}")
+    }
+}

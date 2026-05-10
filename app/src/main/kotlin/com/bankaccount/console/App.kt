@@ -23,6 +23,7 @@ import com.bankaccount.console.transaction.application.CreateTransactionUseCases
 import com.bankaccount.console.transaction.application.GetTransactionUseCases
 import com.bankaccount.console.transaction.infrastructure.repository.InMemoryTransactionRepository
 import com.bankaccount.console.transaction.infrastructure.console.TransactionConsoleAdapter
+import kotlin.system.exitProcess
 
 fun main() {
     val terminal = Terminal()
@@ -66,45 +67,23 @@ fun main() {
         accountPort = accountBalanceUseCases
     )
 
-    header(terminal)
-    var userId: String? = null
-    while(true) {
-        val options = mainMenu(terminal, userId)
-
-        if (options == "3") {
-            terminal.danger("Exiting...")
-            System.exit(0)
-        }
-
-        when (options) {
-            "1" -> {
-                app.run()
-            }
-            "2" -> {
-                userId = authenticateApp.run()
-            }
-            "3" -> {
-                terminal.danger("Exiting...")
-                System.exit(0)
-            }
-            "4" -> {
-                terminal.success("Fetching account balance...")
-                accountBalanceApp.run(userId!!)
-            }
-            "5" -> {
-                terminal.success("Fetching transaction history...")
-                transactionApp.run(userId!!)
-            }
-            "6" -> {
-                userId = null
-                terminal.danger("Logged out successfully...")
-            }
-            else -> terminal.danger("Invalid option, please try again.")
-        }
-    }
+    val dependencies = AppDependencies(
+        createAccount = { app.run() },
+        login = { authenticateApp.run() },
+        accountBalance = { id -> accountBalanceApp.run(id) },
+        transactionHistory = { id -> transactionApp.run(id) }
+    )
+    val maxIterations = System.getProperty("app.maxIterations")?.toIntOrNull()
+    runApp(
+        terminal = terminal,
+        dependencies = dependencies,
+        menu = ::mainMenu,
+        exit = ::exitProcess,
+        maxIterations = maxIterations
+    )
 }
 
-private fun header(terminal: Terminal) {
+internal fun header(terminal: Terminal) {
         val pixelTitle =
                 """
                 ██████╗  █████╗ ███╗   ██╗██╗  ██╗
@@ -129,7 +108,17 @@ private fun header(terminal: Terminal) {
         terminal.println((brightBlue + italic)(subtitle))
     }
 
-    private fun mainMenu(terminal: Terminal, userId: String?): String? {
+    internal fun mainMenu(terminal: Terminal, userId: String?): String? {
+        return mainMenu(terminal, userId) { choices, info ->
+            terminal.interactiveSelectList(choices, info)
+        }
+    }
+
+    internal fun mainMenu(
+        terminal: Terminal,
+        userId: String?,
+        select: (List<String>, String) -> String?
+    ): String? {
         val title =
                 """
             What would you like to do?:
@@ -143,11 +132,7 @@ private fun header(terminal: Terminal) {
             menuInfo = "Choose an option or exit (1, 2, 3 or 4)"
         }
 
-        val selection =
-                terminal.interactiveSelectList(
-                        userChoices,
-                        menuInfo,
-                )
+        val selection = select(userChoices, menuInfo)
 
         if (selection == null) {
             terminal.danger("Aborted account creation")
@@ -167,9 +152,61 @@ private fun header(terminal: Terminal) {
             "1. Get Account Balance" -> "4"
             "2. Transactions" -> "5"
             "3. Logout" -> "6"
-            "4. Exit" -> "7"
+            "4. Exit" -> "3"
             else -> "invalid"
         }
     }
+
+internal data class AppDependencies(
+    val createAccount: () -> Unit,
+    val login: () -> String?,
+    val accountBalance: (String) -> Unit,
+    val transactionHistory: (String) -> Unit
+)
+
+internal fun runApp(
+    terminal: Terminal,
+    dependencies: AppDependencies,
+    menu: (Terminal, String?) -> String?,
+    exit: (Int) -> Nothing,
+    maxIterations: Int? = null
+) {
+    header(terminal)
+    var userId: String? = null
+    var iterations = 0
+    while (true) {
+        if (maxIterations != null && iterations >= maxIterations) {
+            return
+        }
+        iterations += 1
+        val options = menu(terminal, userId)
+
+        when (options) {
+            "1" -> {
+                dependencies.createAccount()
+            }
+            "2" -> {
+                userId = dependencies.login()
+            }
+            "3" -> {
+                terminal.danger("Exiting...")
+                exit(0)
+            }
+            "4" -> {
+                terminal.success("Fetching account balance...")
+                dependencies.accountBalance(userId!!)
+            }
+            "5" -> {
+                terminal.success("Fetching transaction history...")
+                dependencies.transactionHistory(userId!!)
+            }
+            "6" -> {
+                userId = null
+                terminal.danger("Logged out successfully...")
+            }
+            else -> terminal.danger("Invalid option, please try again.")
+        }
+    }
+}
 
 

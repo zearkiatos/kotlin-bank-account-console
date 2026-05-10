@@ -45,10 +45,26 @@ class BankAccountConsoleAdapter(
                         }
                     }
 
+            var balance: Double = 0.0
+            if (option == "2") {
+                balance = balanceForm()
+            }
+            
+
             val userId = this.createUser()
 
-            this.createAccount(userId, accountType)
+            this.createAccount(userId, accountType, balance)
         }
+    }
+
+    fun balanceForm(): Double {
+        val balance = askRequiredText("How much credit would you like to add?") ?: return 0.0
+
+        if (balance.toDoubleOrNull() == null) {
+            terminal.danger("Invalid balance amount, please enter a valid number.")
+            balanceForm()
+        }
+        return balance.toDouble()
     }
 
     private fun menu(): String? {
@@ -113,11 +129,12 @@ class BankAccountConsoleAdapter(
         return userId
     }
 
-    private fun createAccount(userId: String, accountType: AccountType) {
+    private fun createAccount(userId: String, accountType: AccountType, balance: Double) {
         val request =
                 CreateAccountRequest(
                         userId = userId,
                         accountType = accountType.name,
+                        balance = balance,
                         transactions = mutableListOf()
                 )
         val account = createAccountPort.create(request)
