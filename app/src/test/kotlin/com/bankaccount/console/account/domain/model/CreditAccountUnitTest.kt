@@ -11,12 +11,31 @@ class CreditAccountUnitTest {
         val accountId = UUID.randomUUID().toString()
         val userId = UUID.randomUUID().toString()
         val accountNumber = "1234567890"
+        val balance = 1000.0
+        val transactions = mutableListOf<String>()
 
-        val creditAccount = CreditAccount(id = accountId, userId = userId, accountNumber = accountNumber)
+        val creditAccount = CreditAccount(id = accountId, userId = userId, accountNumber = accountNumber, balance = balance, transactions = transactions)
 
         assertEquals(accountId, creditAccount.id)
         assertEquals(userId, creditAccount.userId)
         assertEquals(accountNumber, creditAccount.accountNumber)
+        assertEquals(balance, creditAccount.balance, 0.0)
+        assertEquals(transactions, creditAccount.transactions)
+    }
+
+    @Test
+    fun `Given a CreditAccount, when withdraw is called with an amount less than balance, then the balance is reduced by that amount`() {
+        val creditAccount = CreditAccount(
+            id = UUID.randomUUID().toString(),
+            userId = UUID.randomUUID().toString(),
+            accountNumber = "1234567890",
+            balance = 1000.0,
+            transactions = mutableListOf()
+        )
+        
+        val newBalance = creditAccount.withdraw(500)
+
+        assertEquals(500, newBalance)
     }
     
 }

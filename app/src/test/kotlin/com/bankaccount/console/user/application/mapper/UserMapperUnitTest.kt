@@ -52,4 +52,23 @@ class UserMapperUnitTest {
         assertEquals("john.doe@example.com", userResponse.email)
         assertEquals("hashedPassword", userResponse.passwordHash)
     }
+
+       @Test
+    fun `Given a CreateUserRequest with null id, when toDomain is called, then id should be empty string`() {
+        val createUserRequest = CreateUserRequest(
+            id = null,
+            firstName = "Jane",
+            lastName = "Smith",
+            email = "jane.smith@example.com",
+            password = "hashedPassword123"
+        )
+
+        val user = createUserRequest.toDomain()
+
+        assertEquals("", user.id)
+        assertEquals("Jane", user.firstName)
+        assertEquals("Smith", user.lastName)
+        assertEquals("jane.smith@example.com", user.email)
+        assertEquals("hashedPassword123", user.passwordHash)
+    }
 }

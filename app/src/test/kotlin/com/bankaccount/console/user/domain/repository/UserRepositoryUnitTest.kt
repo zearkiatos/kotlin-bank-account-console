@@ -44,41 +44,46 @@ class UserRepositoryUnitTest {
     }
 
     @Test
-    fun `Given a User, when authenticated with correct credentials, then it returns the User`() {
+    fun `Given a email, when getUserByEmail is called, then it returns the correct User`() {
         val userId = UUID.randomUUID().toString()
         val email = "alice.johnson@example.com"
-        val passwordHash = "hashed_password"
         val user = User(
             id = userId,
             firstName = "Alice",
             lastName = "Johnson",
             email = email,
-            passwordHash = passwordHash
+            passwordHash = "hashed_password"
         )
         userRepository.create(user)
+
+        val retrievedUser = userRepository.getUserByEmail(email)
         
-        val authenticatedUser = userRepository.authenticate(email, passwordHash)
-        
-        assertEquals(user, authenticatedUser)
+        assertEquals(user, retrievedUser)
     }
 
     @Test
-    fun `Given a User, when authenticated with incorrect credentials, then it returns null`() {
+    fun `Given a non-existent email, when there are a user and getUserByEmail is called, then it returns null`() {
         val userId = UUID.randomUUID().toString()
         val email = "alice.johnson@example.com"
-        val passwordHash = "hashed_password"
         val user = User(
             id = userId,
             firstName = "Alice",
             lastName = "Johnson",
             email = email,
-            passwordHash = passwordHash
+            passwordHash = "hashed_password"
         )
         userRepository.create(user)
-       
-        val authenticatedUser = userRepository.authenticate(email, "wrong_password")
-       
-        assertNull(authenticatedUser)
+        
+        val retrievedUser = userRepository.getUserByEmail("non.existent@example.com")
+            
+        assertNull(retrievedUser)
+    }
+
+    @Test
+    fun `Given a non-existent email, when getUserByEmail is called, then it returns null`() {
+            val retrievedUser = userRepository.getUserByEmail("non.existent@example.com")
+            
+            assertNull(retrievedUser)
     }
 
     @Test

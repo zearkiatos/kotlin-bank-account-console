@@ -29,7 +29,7 @@ class InMemoryUserRepository : UserRepository {
         users.removeIf { it.id == id }
     }
 
-    override fun authenticate(email: String, password: String): User? {
-        return users.find { it.email == email && it.passwordHash == password }
+    override fun getUserByEmail(email: String): User? {
+        return users.find { it.email == email }
     }
 }

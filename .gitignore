@@ -4,6 +4,11 @@
 # Ignore Gradle build output directory
 build
 
+# Ignore JaCoCo coverage reports
+app/build/reports/jacoco/
+
 .DS_Store
 .idea
 .kotlin
+
+app/build/reports/jacoco/

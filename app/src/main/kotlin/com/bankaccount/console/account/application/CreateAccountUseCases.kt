@@ -18,6 +18,7 @@ class CreateAccountUseCases(
         require(request.userId.isNotBlank()) { "User ID must not be blank" }
 
         val accountId = UUID.randomUUID().toString()
+        val balance = request.balance
         val account = request.copy(
             id = accountId,
             accountNumber = BankAccountNumberGenerator.generate(
@@ -27,7 +28,8 @@ class CreateAccountUseCases(
                     "CREDIT" -> AccountType.CREDIT
                     else -> throw IllegalArgumentException("Invalid account type: ${request.accountType.trim()}")
                 }
-            )
+            ),
+            balance = balance
         ).toDomain()
 
         accountRepository.create(account)

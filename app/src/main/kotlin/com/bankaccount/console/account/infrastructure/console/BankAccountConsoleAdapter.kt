@@ -23,12 +23,11 @@ class BankAccountConsoleAdapter(
     private val terminal = Terminal()
 
     fun run() {
-        header()
-        while (true) {
-            val option = menu()
+        var option: String? = null
+        while (option != "4") {
+            option = menu()
             if (option == "4") {
-                terminal.danger("Exiting...")
-                System.exit(0)
+                terminal.danger("Returning to main menu...")
             }
 
             val accountType =
@@ -36,18 +35,36 @@ class BankAccountConsoleAdapter(
                         "1" -> AccountType.DEBIT
                         "2" -> AccountType.CREDIT
                         "3" -> AccountType.CHECKING
+                        "4" -> {
+                            terminal.danger("Redirect to the main menu..")
+                            return
+                        }
                         else -> {
                             terminal.danger("Invalid option, please try again.")
                             continue
                         }
                     }
 
+            var balance: Double = 0.0
+            if (option == "2") {
+                balance = balanceForm()
+            }
+            
+
             val userId = this.createUser()
 
-            this.createAccount(userId, accountType)
-
-            System.exit(0)
+            this.createAccount(userId, accountType, balance)
         }
+    }
+
+    fun balanceForm(): Double {
+        val balance = askRequiredText("How much credit would you like to add?") ?: return 0.0
+
+        if (balance.toDoubleOrNull() == null) {
+            terminal.danger("Invalid balance amount, please enter a valid number.")
+            balanceForm()
+        }
+        return balance.toDouble()
     }
 
     private fun menu(): String? {
@@ -57,7 +74,7 @@ class BankAccountConsoleAdapter(
         """.trimIndent()
         terminal.println((brightGreen + bold)(title))
 
-        val userChoices = listOf("1. Debit Account", "2. Credit Account", "3. Checking Account", "Exit")
+        val userChoices = listOf("1. Debit Account", "2. Credit Account", "3. Checking Account", "Return to Main Menu")
         val selection =
                 terminal.interactiveSelectList(
                         userChoices,
@@ -72,31 +89,6 @@ class BankAccountConsoleAdapter(
         val index = userChoices.indexOf(selection)
         terminal.success("You chose option $index: $selection")
         return (index + 1).toString()
-    }
-
-    private fun header() {
-        val pixelTitle =
-                """
-                ██████╗  █████╗ ███╗   ██╗██╗  ██╗
-                ██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝
-                ██████╔╝███████║██╔██╗ ██║█████╔╝ 
-                ██╔══██╗██╔══██║██║╚██╗██║██╔═██╗ 
-                ██████╔╝██║  ██║██║ ╚████║██║  ██╗
-                ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
-                                                  
-                 █████╗  ██████╗ ██████╗ ██████╗ ██╗   ██╗███╗   ██╗████████╗
-                ██╔══██╗██╔════╝██╔════╝██╔═══██╗██║   ██║████╗  ██║╚══██╔══╝
-                ███████║██║     ██║     ██║   ██║██║   ██║██╔██╗ ██║   ██║   
-                ██╔══██║██║     ██║     ██║   ██║██║   ██║██║╚██╗██║   ██║   
-                ██║  ██║╚██████╗╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║   ██║   
-                ╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝   ╚═╝                                                                                                 
-    """.trimIndent()
-        val subtitle =
-                """
-            Welcome to your banking system.                                                                                                
-    """.trimIndent()
-        terminal.println((brightBlue + bold)(pixelTitle))
-        terminal.println((brightBlue + italic)(subtitle))
     }
 
     fun createUser(): String {
@@ -137,11 +129,13 @@ class BankAccountConsoleAdapter(
         return userId
     }
 
-    private fun createAccount(userId: String, accountType: AccountType) {
+    private fun createAccount(userId: String, accountType: AccountType, balance: Double) {
         val request =
                 CreateAccountRequest(
                         userId = userId,
-                        accountType = accountType.name
+                        accountType = accountType.name,
+                        balance = balance,
+                        transactions = mutableListOf()
                 )
         val account = createAccountPort.create(request)
         terminal.success("Account created successfully! Account ID: ${account.id}")
@@ -152,6 +146,7 @@ class BankAccountConsoleAdapter(
         User ID: ${account.userId}
         Account Number: ${account.accountNumber}
         Account Type: ${account.accountType}
+        Balance: ${account.balance}
             """.trimIndent()
 
         terminal.println(
